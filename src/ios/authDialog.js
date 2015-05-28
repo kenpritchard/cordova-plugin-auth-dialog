@@ -40,7 +40,7 @@ authDialog.authenticate = function (uri, /*optional*/ successCallback, /*optiona
     
     var onError = function (err) {
         
-        if (maxAttempts-- <= 0 || err === "cancelled") {
+        if (--maxAttempts <= 0 || err === "cancelled") {
             errorCallback(err);
             return;
         }
