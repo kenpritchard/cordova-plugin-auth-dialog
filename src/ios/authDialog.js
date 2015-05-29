@@ -21,41 +21,42 @@
 
 var authDialog  = {};
 
-function authenticateOnce (uri, successCallback, errorCallback, userName, password, allowBypassAuth) {
-    cordova.exec(successCallback, errorCallback, 'AuthDialog', 'authenticate', [uri, userName, password, allowBypassAuth]);
+function authenticateOnce (method, uri, successCallback, errorCallback, userName, password, allowBypassAuth) {
+    cordova.exec(successCallback, errorCallback, 'AuthDialog', 'authenticate', [method, uri, userName, password, allowBypassAuth]);
 }
 
-authDialog.authenticate = function (uri, /*optional*/ successCallback, /*optional*/ errorCallback,  /*optional*/ userName,  /*optional*/ password,  /*optional*/ maxAttempts) {
-    
+authDialog.authenticate = function (method, uri, /*optional*/ successCallback, /*optional*/ errorCallback,  /*optional*/ userName,  /*optional*/ password,  /*optional*/ maxAttempts) {
+
     if (!uri) {
         throw new Error('Uri is not specified');
     }
-    
+
+    method = method || null;
     userName = userName || null;
     password = password || null;
     maxAttempts = maxAttempts || 5;
-    
+
     errorCallback = errorCallback || function() {};
     successCallback = successCallback || function() {};
-    
+
     var onError = function (err) {
-        
+
         if (--maxAttempts <= 0 || err === "cancelled") {
             errorCallback(err);
             return;
         }
-        
+
         // if first attemp has failed then user name and password are invalid
         // so we should ask user to provide another credentials so we don't pass user/password
         setTimeout(function() {
-             authenticateOnce (uri, successCallback, onError, null, null, false);
+             authenticateOnce (method, uri, successCallback, onError, null, null, false);
         });
     };
-    
+
     // allowBypass specifies whether app should try to resolve authentication challenge automatically
     // first (cached credentials). This should be done only if no user and password are provided;
     // this makes it possible to avoid passing credentials every app start
-    authenticateOnce (uri, successCallback, onError, userName, password, !(userName || password));
+    authenticateOnce (method, uri, successCallback, onError, userName, password, !(userName || password));
 };
 
 module.exports = authDialog;
