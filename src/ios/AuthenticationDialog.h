@@ -8,6 +8,7 @@
 
 @interface AuthenticationDialog: CDVPlugin <NSURLConnectionDataDelegate>
 
+@property NSString *method;
 @property NSString *uri;
 @property NSString *userName;
 @property NSString *password;
