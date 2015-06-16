@@ -9,7 +9,7 @@
 
 - (void)authenticate:(CDVInvokedUrlCommand*)command
 {
-    self.method = [command.arugments objectAtIndex:0];
+    self.method = [command.arguments objectAtIndex:0];
     self.uri = [command.arguments objectAtIndex:1];
     self.userName = [command.arguments objectAtIndex:2];
     self.password = [command.arguments objectAtIndex:3];
